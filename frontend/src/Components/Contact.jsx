@@ -1,4 +1,5 @@
 import React from 'react';
+import { API_BASE_URL } from "../lib/api";
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
@@ -16,7 +17,7 @@ function Contact() {
     }
 
     try {
-      const response = await fetch('http://localhost:4000/contact', {
+      const response = await fetch(`${API_BASE_URL}/contact`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),

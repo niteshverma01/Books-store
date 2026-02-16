@@ -2,7 +2,7 @@ import React from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Login from "./Login";
 import { useForm } from "react-hook-form";
-import axios from "axios";
+import { api } from "../lib/api";
 import toast from "react-hot-toast";
 function Signup() {
   const location = useLocation();
@@ -20,8 +20,8 @@ function Signup() {
       email: data.email,
       password: data.password,
     };
-    await axios
-      .post("http://localhost:4000/user/signup", userInfo)
+    await api
+      .post("/user/signup", userInfo)
       .then((res) => {
         console.log(res.data);
         if (res.data) {
@@ -42,7 +42,7 @@ function Signup() {
       <div className="flex h-screen items-center justify-center">
         <div className=" w-[600px] ">
           <div className="modal-box">
-            <form onSubmit={handleSubmit(onSubmit)} method="dialog">
+            <form onSubmit={handleSubmit(onSubmit)}>
               {/* if there is a button in form, it will close the modal */}
               <Link
                 to="/"
@@ -107,20 +107,21 @@ function Signup() {
                 <button className="bg-pink-500 text-white rounded-md px-3 py-1 hover:bg-pink-700 duration-200">
                   Signup
                 </button>
-                <p className="text-xl">
+                <div className="text-xl">
                   Have account?{" "}
                   <button
+                    type="button"
                     className="underline text-blue-500 cursor-pointer"
                     onClick={() =>
                       document.getElementById("my_modal_3").showModal()
                     }
                   >
                     Login
-                  </button>{" "}
-                  <Login />
-                </p>
+                  </button>
+                </div>
               </div>
             </form>
+            <Login />
           </div>
         </div>
       </div>

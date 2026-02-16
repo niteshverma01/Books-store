@@ -1,11 +1,17 @@
 import { sendEmail } from "../utils/contact.utils.js";
 
 export async function createContact(req, res) {
-  const { senderEmail, message } = req.body;
+  const { fullname, email, message } = req.body;
+
+  if (!email || !message) {
+    return res
+      .status(400)
+      .json({ message: "Email and message are required." });
+  }
 
   try {
     // Send email using the sender's email and message from the form
-    await sendEmail(senderEmail, message);
+    await sendEmail({ fullname, email, message });
 
     // Respond back to the user
     res.status(200).json({ message: "Email sent successfully!" });

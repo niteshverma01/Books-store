@@ -14,15 +14,22 @@ const app = express();
 dotenv.config();
 
 // Middleware
-app.use(cors());
+const CLIENT_ORIGIN = process.env.CLIENT_ORIGIN || "*";
+app.use(
+  cors({
+    origin: CLIENT_ORIGIN,
+  })
+);
 app.use(express.json());
 
 // Get MongoDB URL and port from environment variables
 const URL = process.env.MongoDBURL;
 const PORT = process.env.PORT || 4001;
 
-// Log the MongoDB URL to check if it's loaded properly
-console.log("MongoDB URL:", URL); // This will help in debugging
+if (!URL) {
+  console.error("Missing MongoDBURL in environment.");
+  process.exit(1);
+}
 
 // MongoDB Connection
 mongoose.connect(URL)
@@ -33,6 +40,10 @@ mongoose.connect(URL)
 app.use("/book", bookRoute);
 app.use("/user", userRoute);
 app.use("/contact", contactRoute);
+
+app.get("/health", (_req, res) => {
+  res.status(200).json({ status: "ok" });
+});
 
 // Start the server
 app.listen(PORT, () => {
